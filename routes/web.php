@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Instructor\StudentProgress;
 use App\Livewire\Student\CourseView;
 use App\Livewire\Student\LessonView;
 use Illuminate\Support\Facades\Route;
@@ -19,16 +20,16 @@ Route::view('profile', 'profile')
     ->name('profile');
 
 
-Route::middleware(['auth'])->group(function () {
-    Route::middleware('can:is-instructor')->prefix('instructor')->name('instructor.')->group(function () {
-        Route::get('/courses', Courses::class)->name('courses');
-        Route::get('/courses/create', CourseForm::class)->name('courses.create');
-        Route::get('/courses/{course}/lessons/create', LessonForm::class)->name('lessons.create');
-    });
-    Route::middleware(['auth', 'can:is-student'])->prefix('student')->name('student.')->group(function () {
-        Route::get('/courses/{course}', CourseView::class)->name('courses.view');
-        Route::get('/lessons/{lesson}', LessonView::class)->name('lessons.view');
-    });
+Route::middleware(['auth', 'role:instructor'])->prefix('instructor')->name('instructor.')->group(function () {
+    Route::get('/courses', Courses::class)->name('courses');
+    Route::get('/courses/create', CourseForm::class)->name('courses.create');
+    Route::get('/courses/{course}/lessons/create', LessonForm::class)->name('lessons.create');
+    Route::get('/courses/{course}/progress', StudentProgress::class)->name('courses.progress');
+});
+
+Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')->group(function () {
+    Route::get('/courses/{courseId}', CourseView::class)->name('courses.view');
+    Route::get('/lessons/{lesson}', LessonView::class)->name('lessons.view');
 });
 
 require __DIR__ . '/auth.php';
