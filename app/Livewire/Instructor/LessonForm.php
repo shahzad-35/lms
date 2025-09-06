@@ -18,8 +18,7 @@ class LessonForm extends Component
 
     protected $rules = [
         'title' => 'required|min:3',
-        'video' => 'required|max:51200'
-
+        'video' => 'required|file|mimes:mp4,avi,mov,wmv|max:51200',
     ];
 
 

@@ -1,49 +1,37 @@
 <div>
-    <h2 class="text-xl font-semibold mb-4">{{ $lesson->title }}</h2>
+    <h1 class="text-2xl font-bold mb-4">{{ $lesson->title }}</h1>
 
+    <div class="w-96 h-56 overflow-hidden rounded shadow">
+        <video id="lesson-player" class="video-js w-full h-full" controls preload="auto">
+            <source src="{{ asset('storage/' . $lesson->video_path) }}" type="video/mp4" />
+        </video>
+    </div>
 
-    <video id="lesson-player" class="video-js vjs-default-skin w-full" controls preload="auto" data-setup='{}'>
-        <source src="{{ Storage::url($lesson->video_path) }}" type="video/mp4">
-    </video>
+    <div class="mt-2 text-sm text-gray-700">
+        Watched: {{ round(($currentTime / max(1, $lesson->duration)) * 100, 1) }}%
+    </div>
+
+    {{-- Bind currentTime to Livewire --}}
+    <input type="hidden" wire:model="currentTime">
+
+    {{-- Poll backend every 2s to save --}}
+    <div wire:poll.2s="updateWatch"></div>
+
+    {{-- Video.js CSS + JS --}}
+    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
+    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
+
+    <script>
+        document.addEventListener('livewire:load', function () {
+        var player = videojs('lesson-player');
+
+        // Resume from last position
+        player.currentTime(@this.get('currentTime'));
+
+        // Update Livewire property every second
+        setInterval(() => {
+            @this.set('currentTime', Math.floor(player.currentTime()));
+        }, 1000);
+    });
+    </script>
 </div>
-
-
-@push('scripts')
-<script>
-    document.addEventListener('livewire:navigated', () => {
-if (window.player) {
-window.player.dispose();
-}
-window.player = videojs('lesson-player');
-
-
-// Event listeners
-const userId = {{ auth()->id() }};
-const lessonId = {{ $lesson->id }};
-
-
-function sendProgress(eventType, currentTime, duration) {
-fetch("/api/watch-log", {
-method: "POST",
-headers: {
-"Content-Type": "application/json",
-"X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-},
-body: JSON.stringify({
-user_id: userId,
-lesson_id: lessonId,
-current_time: currentTime,
-duration: duration,
-event: eventType
-})
-});
-}
-
-
-window.player.on('play', () => sendProgress('play', window.player.currentTime(), window.player.duration()));
-window.player.on('pause', () => sendProgress('pause', window.player.currentTime(), window.player.duration()));
-window.player.on('seeked', () => sendProgress('seek', window.player.currentTime(), window.player.duration()));
-window.player.on('ended', () => sendProgress('ended', window.player.currentTime(), window.player.duration()));
-});
-</script>
-@endpush

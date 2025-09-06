@@ -1,5 +1,7 @@
 <?php
 
+use App\Livewire\Student\CourseDetail;
+use App\Livewire\Student\MyEnrollments;
 use App\Livewire\Student\StudentCourses;
 use App\Livewire\Instructor\StudentProgress;
 use App\Livewire\Student\CourseView;
@@ -36,8 +38,10 @@ Route::middleware(['auth', 'role:instructor'])->prefix('instructor')->name('inst
 
 Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')->group(function () {
     Route::get('/courses/{courseId}', CourseView::class)->name('courses.view');
-    Route::get('/lessons/{lesson}', LessonView::class)->name('lessons.view');
+    Route::get('/lessons/{lessonId}', LessonView::class)->name('lessons.view');
     Route::get('/courses', StudentCourses::class)->name('courses');
+    Route::get('/courses/{course}', CourseDetail::class)->name('course.show');
+    Route::get('/enrollments', MyEnrollments::class)->name('enrollments');
 });
 
 require __DIR__ . '/auth.php';
