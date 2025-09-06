@@ -43,4 +43,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(WatchLog::class);
     }
+
+    public function enrolledCourses()
+    {
+        return $this->belongsToMany(Course::class, 'enrollments');
+    }
 }
