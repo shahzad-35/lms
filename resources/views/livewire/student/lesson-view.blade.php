@@ -11,27 +11,32 @@
         Watched: {{ round(($currentTime / max(1, $lesson->duration)) * 100, 1) }}%
     </div>
 
-    {{-- Bind currentTime to Livewire --}}
     <input type="hidden" wire:model="currentTime">
 
-    {{-- Poll backend every 2s to save --}}
-    <div wire:poll.2s="updateWatch"></div>
-
-    {{-- Video.js CSS + JS --}}
     <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
     <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
 
     <script>
-        document.addEventListener('livewire:load', function () {
-        var player = videojs('lesson-player');
-
-        // Resume from last position
-        player.currentTime(@this.get('currentTime'));
-
-        // Update Livewire property every second
-        setInterval(() => {
-            @this.set('currentTime', Math.floor(player.currentTime()));
-        }, 1000);
+        const player = document.getElementById('lesson-player');
+        player.addEventListener('pause', () => {
+        const currentTime = Math.floor(player.currentTime);
+        @this.call('updateWatch', currentTime);
     });
+    let lastUpdate = 0;
+
+    player.addEventListener('ended', () => {
+        const currentTime = Math.floor(player.currentTime);
+        @this.call('updateWatch', currentTime);
+    });
+
+    //     player.addEventListener('timeupdate', () => {
+    //         const currentTime = Math.floor(player.currentTime);
+    
+    // if (currentTime - lastUpdate >= 2) {
+    //     lastUpdate = currentTime;
+    //     console.log("Watched seconds:", currentTime);
+    //                 @this.call('updateWatch', currentTime);
+    // }
+    //     });
     </script>
 </div>

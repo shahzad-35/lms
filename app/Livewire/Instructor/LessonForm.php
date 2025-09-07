@@ -6,6 +6,7 @@ namespace App\Livewire\Instructor;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\Lesson;
+use FFMpeg\FFMpeg;
 
 
 class LessonForm extends Component
@@ -27,11 +28,15 @@ class LessonForm extends Component
         $this->validate();
         $path = $this->video->store('lessons', 'public');
 
+        $ffmpeg = FFMpeg::create();
+        $video = $ffmpeg->open(storage_path("app/public/{$path}"));
+        $duration = $video->getStreams()->videos()->first()->get('duration');
 
         Lesson::create([
             'course_id' => $this->course_id,
             'title' => $this->title,
             'video_path' => $path,
+            'duration' => floor ($duration),
             'order' => 0
         ]);
 

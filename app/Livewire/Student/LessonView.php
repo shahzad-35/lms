@@ -23,9 +23,9 @@ class LessonView extends Component
         $this->currentTime = $log->last_position ?? 0;
     }
 
-    public function updateWatch()
+    public function updateWatch($currentTime)
     {
-        $seconds = $this->currentTime;
+        $seconds = $currentTime;
 
         $WatchLog = WatchLog::query()->where('user_id', Auth::id())
             ->where('lesson_id', $this->lesson->id)
