@@ -5,8 +5,9 @@
     <div class="border rounded-lg p-4 mb-4 shadow">
         <h2 class="text-xl font-semibold">{{ $enrollment->course->title }}</h2>
         <p>{{ $enrollment->course->description }}</p>
-        <a href="{{ route('student.course.show', $enrollment->course->id) }}"
+        <a href="{{ route('student.courses.detail', $enrollment->course->id) }}"
             class="bg-green-500 text-white px-3 py-1 rounded">Start / Continue</a>
+
 
     </div>
     @empty

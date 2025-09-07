@@ -9,20 +9,26 @@
 
     <div class="grid grid-cols-3 gap-4">
         @foreach ($courses as $course)
-        <div class="p-4 border rounded shadow">
+        <div class="p-4 border rounded shadow bg-white">
             <h2 class="text-xl font-semibold">{{ $course->title }}</h2>
-            <p>{{ $course->description }}</p>
-            <p class="text-sm text-gray-600">Enrolled: {{ $course->students_count }}</p>
+            <p class="text-gray-700">{{ $course->description }}</p>
+            <p class="text-sm text-gray-600 mb-2">
+                Enrolled: {{ $course->students_count }}
+            </p>
 
+            {{-- If already enrolled --}}
             @if ($user->enrolledCourses->contains($course->id))
-            <a href="{{ route('student.course.show', $course->id) }}"
-                class="mt-2 inline-block bg-blue-500 text-white px-4 py-1 rounded">
+            <a href="{{ route('student.courses.detail', $course->id) }}"
+                class="mt-2 inline-block bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600">
                 Continue Course
             </a>
+
+            {{-- Not enrolled yet --}}
             @else
-            <button wire:click="enroll({{ $course->id }})" class="mt-2 bg-green-500 text-white px-4 py-1 rounded">
-                Enroll
-            </button>
+            <a href="{{ route('student.courses.detail', $course->id) }}" class="bg-{{ $course->price > 0 ? 'green' : 'blue' }}-600 
+                               text-white px-3 py-1 rounded hover:bg-{{ $course->price > 0 ? 'green' : 'blue' }}-700">
+                {{ $course->price > 0 ? 'View & Pay' : 'View & Enroll' }}
+            </a>
             @endif
         </div>
         @endforeach

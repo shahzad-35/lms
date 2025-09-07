@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PaymentController;
 use App\Livewire\Student\CourseDetail;
 use App\Livewire\Student\MyEnrollments;
 use App\Livewire\Student\StudentCourses;
@@ -40,8 +41,15 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::get('/courses/{courseId}', CourseView::class)->name('courses.view');
     Route::get('/lessons/{lessonId}', LessonView::class)->name('lessons.view');
     Route::get('/courses', StudentCourses::class)->name('courses');
-    Route::get('/courses/{course}', CourseDetail::class)->name('course.show');
+    // Route::get('/courses/{course}', CourseDetail::class)->name('course.show');
     Route::get('/enrollments', MyEnrollments::class)->name('enrollments');
+
+    Route::post('/payment/pay', [PaymentController::class, 'pay'])
+    ->name('payment.pay');
+
+    Route::get('/courses_detail/{courseId}', CourseDetail::class)
+        ->name('courses.detail');
+
 });
 
 require __DIR__ . '/auth.php';
