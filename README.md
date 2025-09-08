@@ -1,6 +1,6 @@
 # 🎓 Online LMS – Laravel + Livewire  
 
-[![Laravel](https://img.shields.io/badge/Laravel-10.x-red?logo=laravel)](https://laravel.com)  
+[![Laravel](https://img.shields.io/badge/Laravel-12.x-red?logo=laravel)](https://laravel.com)  
 [![Livewire](https://img.shields.io/badge/Livewire-3.x-purple?logo=livewire)](https://livewire.laravel.com/)  
 [![Payments](https://img.shields.io/badge/Payments-Checkout.com-blue)](https://www.checkout.com/)  
 [![License](https://img.shields.io/badge/license-MIT-green)](#)  
