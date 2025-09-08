@@ -107,7 +107,7 @@ Use any valid expiry date & CVV.
 ## 👨‍💻 Author  
 
 **Shahzad Ali**  
-🌐 [LinkedIn](https://www.linkedin.com/in/shahzadali035) | 💻 [GitHub](https://github.com/)  
+🌐 [LinkedIn](https://www.linkedin.com/in/shahzadali035)
 
 ---
 
